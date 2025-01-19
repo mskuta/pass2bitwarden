@@ -1,6 +1,6 @@
 # pass2bitwarden
 
-A Python script to export data from [pass](https://www.passwordstore.org/) in [Bitwarden](https://bitwarden.com/) CSV format. This started as a quick and dirty script to move my passwords to Bitwarden, but it turned out worthy of being shared.
+A Python script to export data from [Pass](https://www.passwordstore.org/) in [Bitwarden](https://bitwarden.com/) CSV format. This started as a quick and dirty script to move my passwords to Bitwarden, but it turned out worthy of being shared.
 
 Inspired by [reinefjord/pass2csv](https://github.com/reinefjord/pass2csv), but rewritten from scratch. There's probably some similarities.
 
@@ -12,20 +12,20 @@ Currently, the parsed fields and any resulting formatting with regexp group matc
 
 By default the script exports data in the [Bitwarden Generic CSV Individual Account](https://help.bitwarden.com/article/import-data/#generic-csv-format-individual-account) format.
 
-The GPG encrypted password store data is decrypted and processed. As an example: `login_password` is grabbed from the first line of the data, `login_uri` is matched with `^url ?: ?(.*)$` and the `type` is always `login`. Check out the `defaults.py` file if you have any other requirements and create the `config.py` file.
+The GPG encrypted password store data is decrypted and processed. As an example: `login_password` is grabbed from the first line of the data, `login_uri` is matched with `^url ?: ?(.*)$` and the `type` is always `login`.
 
 Most likely, the `fields` and `notes` parsing could be implemented in some nice way by default. Feel free to create pull requests.
 
 ## Usage
 
 ```
-$ ./pass2bw.py -h
-usage: pass2bw.py [-h] [--directory DIRECTORY] [--gpg-binary BINARY]
-                  [--output-file OUTPUT] [--gpg-agent]
+$ ./pass2bitwarden.py -h
+usage: pass2bitwarden.py [-h] [--directory DIRECTORY] [--gpg-binary BINARY]
+                         [--output-file OUTPUT] [--gpg-agent]
 
-Export password-store data to Bitwarden CSV format.
+Exports a .csv for import into Bitwarden/Vaultwarden from Pass.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   --directory DIRECTORY, -d DIRECTORY
                         Directory of the password store.
@@ -39,5 +39,5 @@ optional arguments:
 Example:
 
 ```
-$ ./pass2bw.py -d ~/.password-store/subdir -a -o only_subdir.csv
+$ ./pass2bitwarden.py -d ~/.password-store/subdir -a -o only_subdir.csv
 ```

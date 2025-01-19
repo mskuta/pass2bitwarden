@@ -4,13 +4,11 @@ import argparse
 import csv
 import re
 import os
+import sys
 
 import gnupg
 
-try:
-    from config import CSV_FIELDS, FIELD_DEFAULTS, FIELD_FUNCTIONS, FIELD_PATTERNS
-except ImportError:
-    from defaults import CSV_FIELDS, FIELD_DEFAULTS, FIELD_FUNCTIONS, FIELD_PATTERNS
+from config import CSV_FIELDS, FIELD_DEFAULTS, FIELD_FUNCTIONS, FIELD_PATTERNS
 
 DOMAIN_REGEX_RAW = "^((?!-)[A-Za-z0-9-]" + "{1,63}(?<!-)\\.)" + "+[A-Za-z]{2,6}"
 DOMAIN_REGEX = re.compile(DOMAIN_REGEX_RAW)
@@ -97,13 +95,13 @@ def write(data, output_file):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Export password-store data to Bitwarden CSV format.')
+    parser = argparse.ArgumentParser(description='Exports a .csv for import into Bitwarden/Vaultwarden from Pass.')
 
     parser.add_argument('--directory', '-d', default='~/.password-store',
                         help='Directory of the password store.')
     parser.add_argument('--gpg-binary', '-b', dest='binary', default='/usr/bin/gpg',
                         help='Path to the GPG binary.')
-    parser.add_argument('--output-file', '-o', dest='output', default='pass.csv',
+    parser.add_argument('--output-file', '-o', dest='output', default=os.path.splitext(os.path.basename(sys.argv[0]))[0] + '.csv',
                         help='File to write the CSV in.')
     parser.add_argument('--gpg-agent', '-a', dest='agent', help='Use GPG agent.', action='store_true')
 
