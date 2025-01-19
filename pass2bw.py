@@ -15,6 +15,7 @@ except ImportError:
 DOMAIN_REGEX_RAW = "^((?!-)[A-Za-z0-9-]" + "{1,63}(?<!-)\\.)" + "+[A-Za-z]{2,6}"
 DOMAIN_REGEX = re.compile(DOMAIN_REGEX_RAW)
 
+
 def traverse(directory):
     pass_files = []
 
@@ -50,12 +51,14 @@ def decrypt(files, binary, agent):
 
     return datas
 
+
 def _guess_uri(row):
-    if not 'login_uri' in row:
+    if 'login_uri' not in row:
         return ''
     if re.search(DOMAIN_REGEX, row["name"]):
         return row["name"]
     return ''
+
 
 def parse(base_dir, files):
     parsed = []
