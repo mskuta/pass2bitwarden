@@ -85,13 +85,13 @@ def parse(base_dir, files):
 
 
 def write(data, output_file):
-    with open(output_file, 'w', newline='') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDS)
-
-        writer.writeheader()
-
-        for row in data:
-            writer.writerow(row)
+    csv_file = sys.stdout if output_file == '-' else open(output_file, 'w', newline='')
+    writer = csv.DictWriter(csv_file, fieldnames=CSV_FIELDS)
+    writer.writeheader()
+    for row in data:
+        writer.writerow(row)
+    if csv_file != sys.stdout:
+        csv_file.close()
 
 
 def main():
@@ -102,7 +102,7 @@ def main():
     parser.add_argument('--gpg-binary', '-b', dest='binary', default='/usr/bin/gpg',
                         help='Path to the GPG binary.')
     parser.add_argument('--output-file', '-o', dest='output', default=os.path.splitext(os.path.basename(sys.argv[0]))[0] + '.csv',
-                        help='File to write the CSV in.')
+                        help='File to write the CSV in. If OUTPUT is -, standard output is being used.')
     parser.add_argument('--gpg-agent', '-a', dest='agent', help='Use GPG agent.', action='store_true')
 
     args = parser.parse_args()

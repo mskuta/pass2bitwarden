@@ -32,7 +32,7 @@ options:
   --gpg-binary BINARY, -b BINARY
                         Path to the GPG binary.
   --output-file OUTPUT, -o OUTPUT
-                        File to write the CSV in.
+                        File to write the CSV in. If OUTPUT is -, standard output is being used.
   --gpg-agent, -a       Use GPG agent.
 ```
 
