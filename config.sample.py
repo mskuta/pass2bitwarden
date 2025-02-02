@@ -1,17 +1,17 @@
 import os
 
-# https://help.bitwarden.com/article/import-data/#generic-csv-format-individual-account
 CSV_FIELDS = [
-    'name',
     'folder',
-    'type',
     'favorite',
+    'type',
+    'name',
     'notes',
     'fields',
-    'login_totp',
+    'reprompt',
     'login_uri',
     'login_username',
-    'login_password'
+    'login_password',
+    'login_totp',
 ]
 
 FIELD_DEFAULTS = {
