@@ -19,8 +19,8 @@ FIELD_DEFAULTS = {
 }
 
 FIELD_FUNCTIONS = {
+    'folder': lambda base, path, data: os.path.dirname(os.path.relpath(path, start=base)),
     'name': lambda base, path, data: os.path.basename(path),
-    'folder': lambda base, path, data: os.path.dirname(path).replace(base, '').lstrip('/'),
     'login_password': lambda base, path, data: data.split("\n")[0],
 }
 
