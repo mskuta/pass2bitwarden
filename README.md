@@ -12,9 +12,25 @@ Currently, the parsed fields and any resulting formatting with regexp group matc
 
 The script exports data in the [Bitwarden .csv format](https://bitwarden.com/help/condition-bitwarden-import/).
 
-The GPG encrypted password store data is decrypted and processed. As an example: `login_password` is grabbed from the first line of the data, `login_uri` is matched with `^url ?: ?(.*)$` and the `type` is always `login`.
+The GPG encrypted password store data is decrypted and processed. In the configuration sample, `login_password` is grabbed from the first line of the data, `login_uri` is matched with `^url ?: ?(.*)$` and the `type` is always `login`.
 
-Most likely, the `fields` and `notes` parsing could be implemented in some nice way by default. Feel free to create pull requests.
+Part of an alternative configuration is shown below, which differs from the sample in the following aspects:
+
+- It is assumed that the second line always consists of the `login_username` only.
+- All subsequent lines are combined and put into `notes`.
+
+```
+FIELD_FUNCTIONS = {
+    'folder': lambda base, path, data: os.path.dirname(os.path.relpath(path, start=base)),
+    'name': lambda base, path, data: os.path.basename(path),
+    'notes': lambda base, path, data: '; '.join(data.splitlines()[2:]),
+    'login_username': lambda base, path, data: data.splitlines()[1],
+    'login_password': lambda base, path, data: data.splitlines()[0],
+}
+
+FIELD_PATTERNS = {
+}
+```
 
 ## Usage
 
