@@ -36,20 +36,21 @@ FIELD_PATTERNS = {
 
 ```
 $ ./pass2bitwarden.py -h
-usage: pass2bitwarden.py [-h] [--directory DIRECTORY] [--gpg-binary BINARY]
-                         [--output-file OUTPUT] [--gpg-agent]
+usage: pass2bitwarden.py [-h] [-a] [-b BINARY] [-d DIRECTORY] [-o OUTPUT] [-v]
 
 Exports a .csv for import into Bitwarden/Vaultwarden from Pass.
 
 options:
   -h, --help            show this help message and exit
-  --directory DIRECTORY, -d DIRECTORY
-                        Directory of the password store.
-  --gpg-binary BINARY, -b BINARY
-                        Path to the GPG binary.
-  --output-file OUTPUT, -o OUTPUT
-                        File to write the CSV in. If OUTPUT is -, standard output is being used.
-  --gpg-agent, -a       Use GPG agent.
+  -a, --gpg-agent       use GPG agent
+  -b BINARY, --gpg-binary BINARY
+                        path to the GPG binary
+  -d DIRECTORY, --directory DIRECTORY
+                        directory of the password store
+  -o OUTPUT, --output-file OUTPUT
+                        file to write the CSV in; if OUTPUT is -, standard
+                        output is being used
+  -v, --verbose         be verbose and display progress on standard error
 ```
 
 Example:
