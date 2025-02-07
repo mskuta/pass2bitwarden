@@ -27,7 +27,7 @@ def traverse(directory):
     return pass_files
 
 
-def decrypt(files, binary, agent):
+def decrypt(files, binary, agent, verbose):
     gpg = gnupg.GPG(gpgbinary=binary,
                     use_agent=agent)
     gpg.encoding = 'utf-8'
@@ -39,6 +39,8 @@ def decrypt(files, binary, agent):
         extension = os.path.splitext(path)[1]
 
         if extension == '.gpg':
+            if verbose:
+                print(f"Decrypting: {path}", file=sys.stderr)
             with open(path, 'rb') as gpg_file:
                 decrypted = {
                     'path': file,
@@ -58,10 +60,13 @@ def _guess_uri(row):
     return ''
 
 
-def parse(base_dir, files):
+def parse(base_dir, files, verbose):
     parsed = []
 
     for file in files:
+        if verbose:
+            print(f"Parsing: {os.path.basename(file['path'])}", file=sys.stderr)
+
         row = {}
 
         for field in CSV_FIELDS:
@@ -97,22 +102,25 @@ def write(data, output_file):
 def main():
     parser = argparse.ArgumentParser(description='Exports a .csv for import into Bitwarden/Vaultwarden from Pass.')
 
-    parser.add_argument('--directory', '-d', default='~/.password-store',
-                        help='Directory of the password store.')
-    parser.add_argument('--gpg-binary', '-b', dest='binary', default='/usr/bin/gpg',
-                        help='Path to the GPG binary.')
-    parser.add_argument('--output-file', '-o', dest='output', default=os.path.splitext(os.path.basename(sys.argv[0]))[0] + '.csv',
-                        help='File to write the CSV in. If OUTPUT is -, standard output is being used.')
-    parser.add_argument('--gpg-agent', '-a', dest='agent', help='Use GPG agent.', action='store_true')
+    parser.add_argument('-a', '--gpg-agent', action='store_true', dest='agent',
+                        help='use GPG agent')
+    parser.add_argument('-b', '--gpg-binary', default='/usr/bin/gpg', dest='binary',
+                        help='path to the GPG binary')
+    parser.add_argument('-d', '--directory', default='~/.password-store',
+                        help='directory of the password store')
+    parser.add_argument('-o', '--output-file', default=os.path.splitext(os.path.basename(sys.argv[0]))[0] + '.csv', dest='output',
+                        help='file to write the CSV in; if OUTPUT is -, standard output is being used')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='be verbose and display progress on standard error')
 
     args = parser.parse_args()
 
     password_store = os.path.expanduser(args.directory)
 
     encrypted_files = traverse(password_store)
-    decrypted_files = decrypt(encrypted_files, args.binary, args.agent)
+    decrypted_files = decrypt(encrypted_files, args.binary, args.agent, args.verbose)
 
-    csv_data = parse(password_store, decrypted_files)
+    csv_data = parse(password_store, decrypted_files, args.verbose)
 
     write(csv_data, args.output)
 
